@@ -26,7 +26,7 @@ public class GraphPanel extends JPanel {
                 .flatMap(ArrayList::stream)
                 .mapToDouble(duration -> duration / 1_000_000_000.0) // Converter para segundos
                 .max()
-                .orElse(1.0);
+                .orElse(1.0) ;
 
         int numExecutions = dataMap.values().stream()
                                    .findFirst()
@@ -55,11 +55,21 @@ public class GraphPanel extends JPanel {
         g2.drawLine(padding + labelPadding, height - padding, width - padding, height - padding);
 
         // Rótulos dos eixos
-        g2.drawString("Execução", width / 2, height - padding / 2 + 20);
+        g2.drawString("Execução", width / 2, height - padding + 15);
         g2.drawString("Tempo de Execução (s)", padding / 2, height / 2);
 
-        Color[] colors = {Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE, Color.MAGENTA, Color.CYAN, Color.PINK, Color.YELLOW};
+        Color[] colors = {
+            new Color(0, 0, 139),    
+            new Color(139, 0, 0),    
+            new Color(0, 100, 0),    
+            new Color(184, 134, 11), 
+            new Color(72, 61, 139),  
+            new Color(79, 69, 19),  
+            new Color(70, 130, 180), 
+            new Color(128, 0, 128) 
+        };
         int colorIndex = 0;
+
 
         // Desenho dos pontos e linhas para cada algoritmo e tipo de execução
         for (Map.Entry<String, ArrayList<Long>> entry : dataMap.entrySet()) {
@@ -81,11 +91,9 @@ public class GraphPanel extends JPanel {
                 }
 
                 if (i == durations.size() - 1 || i == 0) {
-                    g2.drawString(String.format("%.3f s", durations.get(i) / 1_000_000_000.0), x - 15, y - 10);
+                    g2.drawString(String.format("%.3f s", durations.get(i) / 1_000_000_000.0), x - 35, y + 5);
                 }
             }
-
-            g2.drawString(algorithm, width - padding - 130, padding + colorIndex * 20 + 20);
             colorIndex++;
         }
 
@@ -105,6 +113,18 @@ public class GraphPanel extends JPanel {
             int y0 = height - padding;
             g2.drawLine(x0, y0, x0, y0 + 5);
             g2.drawString("Exec " + (i + 1), x0 - 10, y0 + 20);
+        }
+
+        int legendX = (width - (colors.length * 225)) / 2;
+        int legendY = height - padding + 30;
+        colorIndex = 0;
+        
+        for (String algorithm : dataMap.keySet()) {
+            g2.setColor(colors[colorIndex % colors.length]);
+            g2.fillRect(legendX + colorIndex * 225, legendY, 15, 15);
+            g2.setColor(Color.BLACK);
+            g2.drawString(algorithm, legendX + colorIndex * 225 + 20, legendY + 12);
+            colorIndex++;
         }
     }
 }
