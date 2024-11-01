@@ -130,7 +130,7 @@ public class Main {
             JFrame frame = new JFrame("Desempenho dos Algoritmos de Ordenação");
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.add(new GraphPanel(dataMap));
-            frame.setSize(800, 600);
+            frame.setSize(2500, 1000);
             frame.setVisible(true);
         });
     }
