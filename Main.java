@@ -90,16 +90,21 @@ public class Main {
     }
 
     private static void testAlgorithm(Runnable algorithm, String algorithmName) {
-        long startTime = System.nanoTime();
-        algorithm.run();
-        long endTime = System.nanoTime();
-        long duration = endTime - startTime;
-
-        System.out.println(algorithmName + " - Tempo: " + duration + "ns");
-
-        String executionType = algorithmName.contains("Paralelo") ? "Paralelo" : "Sequencial";
-        CSVWriter.writeData(algorithmName, executionType, 10000, duration);
+        final int samples = 5;
+    
+        for (int i = 0; i < samples; i++) {
+            long startTime = System.nanoTime();
+            algorithm.run();
+            long endTime = System.nanoTime();
+            long duration = endTime - startTime;
+    
+            System.out.println(algorithmName + " - Execução " + (i + 1) + " Tempo: " + duration + "ns");
+    
+            String executionType = algorithmName.contains("Paralelo") ? "Paralelo" : "Sequencial";
+            CSVWriter.writeData(algorithmName, executionType, 10000, duration);
+        }
     }
+    
 
     private static void clearCSV() {
         try (FileWriter writer = new FileWriter("resultados.csv")) {
