@@ -56,7 +56,7 @@ public class GraphPanel extends JPanel {
 
         // Rótulos dos eixos
         g2.drawString("Execução", width / 2, height - padding + 15);
-        g2.drawString("Tempo de Execução (s)", padding / 2, height / 2);
+        g2.drawString("Tempo de Execução (s)", padding / 2, height / 2 + 20);
 
         Color[] colors = {
             new Color(0, 0, 139),    
