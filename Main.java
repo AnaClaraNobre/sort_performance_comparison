@@ -1,8 +1,11 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.concurrent.ForkJoinPool;
 import java.util.Random;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
@@ -23,7 +26,8 @@ public class Main {
             System.out.println("5 - Executar todos os algoritmos (Sequencial e Paralelo)");
             System.out.println("6 - Limpar conteúdo do arquivo CSV");
             System.out.println("7 - Exibir Gráfico de Desempenho");
-            System.out.println("8 - Sair");
+            System.out.println("8 - Exibir Tabela de Resultados");
+            System.out.println("9 - Sair");
             System.out.print("Escolha: ");
             
             int choice = scanner.nextInt();
@@ -56,9 +60,12 @@ public class Main {
                     displayPerformanceGraph();
                     break;
                 case 8:
-                    running = false;
-                    System.out.println("Saindo do programa...");
-                    break;
+                ResultsTable.displayResultsTable();
+                break;
+                case 9:
+                running = false;
+                System.out.println("Saindo do programa...");
+                break;
                 default:
                     System.out.println("Opção inválida.");
             }
@@ -91,17 +98,25 @@ public class Main {
 
     private static void testAlgorithm(Runnable algorithm, String algorithmName) {
         final int samples = 5;
-    
+        Random random = new Random();
+
         for (int i = 0; i < samples; i++) {
+            int threads = algorithmName.contains("Paralelo") ? 2 + random.nextInt(7) : 1;
+
+            ForkJoinPool pool = new ForkJoinPool(threads);
             long startTime = System.nanoTime();
-            algorithm.run();
+            if (algorithmName.contains("Paralelo")) {
+                pool.submit(algorithm).join(); 
+            } else {
+                algorithm.run();
+            }
             long endTime = System.nanoTime();
             long duration = endTime - startTime;
-    
-            System.out.println(algorithmName + " - Execução " + (i + 1) + " Tempo: " + duration + "ns");
-    
+
+            System.out.println(algorithmName + " - Execução " + (i + 1) + " com " + threads + " threads - Tempo: " + duration + "ns");
+
             String executionType = algorithmName.contains("Paralelo") ? "Paralelo" : "Sequencial";
-            CSVWriter.writeData(algorithmName, executionType, 10000, duration);
+            CSVWriter.writeData(algorithmName, executionType, 10000, threads, duration);
         }
     }
     
