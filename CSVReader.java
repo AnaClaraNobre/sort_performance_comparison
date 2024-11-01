@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CSVReader {
+    
     public static Map<String, ArrayList<Long>> readData(String fileName) {
         Map<String, ArrayList<Long>> dataMap = new HashMap<>();
 
@@ -15,7 +16,7 @@ public class CSVReader {
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
                 String algorithmKey = values[0] + " - " + values[1]; 
-                long duration = Long.parseLong(values[3]);
+                long duration = Long.parseLong(values[4]); // Correção do índice para 4
 
                 dataMap.putIfAbsent(algorithmKey, new ArrayList<>());
                 dataMap.get(algorithmKey).add(duration);

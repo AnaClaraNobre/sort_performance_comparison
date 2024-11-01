@@ -91,7 +91,7 @@ public class GraphPanel extends JPanel {
                 }
 
                 if (i == durations.size() - 1 || i == 0) {
-                    g2.drawString(String.format("%.3f s", durations.get(i) / 1_000_000_000.0), x - 35, y + 5);
+                    g2.drawString(String.format("%.4f s", durations.get(i) / 1_000_000_000.0), x - 35, y + 5);
                 }
             }
             colorIndex++;
@@ -103,7 +103,7 @@ public class GraphPanel extends JPanel {
             int x0 = padding + labelPadding;
             int y0 = height - ((i * (height - padding * 2)) / 10 + padding);
             g2.drawLine(x0 - 5, y0, x0, y0);
-            String yLabel = String.format("%.2f s", (maxDuration * i / 10));
+            String yLabel = String.format("%.4f s", (maxDuration * i / 10));
             g2.drawString(yLabel, x0 - 45, y0 + 5);
         }
 

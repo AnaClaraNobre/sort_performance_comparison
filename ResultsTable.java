@@ -10,15 +10,21 @@ public class ResultsTable {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Resultados de Desempenho dos Algoritmos de Ordenação");
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frame.setSize(900, 400); // Aumentado para acomodar a nova coluna
+            frame.setSize(900, 400);
 
-            String[] columnNames = {"Algoritmo", "Tipo de Execução", "Tamanho dos Dados", "Threads", "Tempo (ns)"};
+            String[] columnNames = {"Algoritmo", "Tipo de Execução", "Tamanho dos Dados", "Threads", "Tempo (s)"};
             DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
 
             for (String[] rowData : data) {
-                if (rowData.length == 5) {
-                    tableModel.addRow(rowData);
-                }
+                double durationInSeconds = Double.parseDouble(rowData[4]) / 1_000_000_000.0;
+                String[] rowWithSeconds = {
+                    rowData[0], 
+                    rowData[1], 
+                    rowData[2], 
+                    rowData[3],
+                    String.format("%.4f", durationInSeconds) 
+                };
+                tableModel.addRow(rowWithSeconds);
             }
 
             JTable table = new JTable(tableModel);
